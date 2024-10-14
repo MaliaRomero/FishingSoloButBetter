@@ -1,8 +1,7 @@
 # FishingSoloButBetter
  
 Playable Build:
-Unity WebGL Player | ReelingAndDealing (maliaromero.github.io)
-
+https://maliaromero.github.io/FishingSoloButBetter/
 
 Added Features:
 
