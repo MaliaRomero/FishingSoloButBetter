@@ -296,6 +296,7 @@ public class GameManager : MonoBehaviour
     {
         if(cardCounter >= 5)
         {
+            Invoke("HideEventText", 0);
             Debug.Log("Out of hand space.");
             winLosePanel.SetActive(true);
             outOfBaitText.gameObject.SetActive(false);
@@ -303,6 +304,7 @@ public class GameManager : MonoBehaviour
         }
         else if(playerController.baitCount <= 0)
         {
+            Invoke("HideEventText", 0);
             Debug.Log("Out of bait.");
             winLosePanel.SetActive(true);
             fullHandText.gameObject.SetActive(false);
