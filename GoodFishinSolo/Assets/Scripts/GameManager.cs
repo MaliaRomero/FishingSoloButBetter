@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject skipDiscardButton;
 
+    public TextMeshProUGUI eventText;
+
     //-----------------VARIABLES FOR WIN/LOSE-------------------
     //bait count also used to check
     public int cardCounter = 0;
@@ -53,6 +55,8 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         skipDiscardButton.SetActive(false);//Turnn off skip discard button
+        eventText.gameObject.SetActive(false);//Turn off event text
+
 
         // Check if playerController is set
         if (playerController == null)
@@ -92,6 +96,7 @@ public class GameManager : MonoBehaviour
 //---------------DRAWING ACTION-----------------------------
     public void DrawFromSpecificDeck(int deckIndex)
     {
+        Invoke("HideEventText", 0);
         if(isPlayerTurn == true){//If allowed to draw
             DrawCard(deckIndex);
             isPlayerTurn = false; //Doesn't let the player draw again
@@ -189,10 +194,66 @@ public class GameManager : MonoBehaviour
 //NEEDS WORK
     public void TriggerEvent()
     {
-        Debug.Log("Trigger Event");
+        int randEvent;
+        if (playerController.baitCount > 2)
+        {
+            randEvent= Random.Range(1, 4); // Generates a number between 1 and 3
+        }
+        else {
+            randEvent = Random.Range(1, 3);
+        }
+
+        switch (randEvent)
+        {
+            case 1:
+                Event1();
+                break;
+            case 2:
+                Event2();
+                break;
+            case 3://Not this if not enough bait, dont want to end players turn;
+                Event3();
+                break;
+        }
     }
 
-//-------------------------UPDATE Ui-----------------------------------------
+    private void Event1()
+    {
+        eventText.text = "Can of worms: Get 3 bait";
+        playerController.baitCount += 3;
+        eventText.gameObject.SetActive(true);
+        UpdateBaitUI(playerController.baitCount);    }
+
+    private void Event2()
+    {
+        eventText.text = "Holy Mackeral: Gain 3 Trophy points";
+        playerController.points += 3;
+        UpdateTrophyPointsUI(playerController.points);
+        eventText.gameObject.SetActive(true);
+    }
+
+    private void Event3()
+    {
+        if (playerController.baitCount > 2) // Assuming playerController is accessible here
+        {
+            eventText.text = "Hungry Guppy: Lose 1 bait";
+            playerController.baitCount -= 3;
+            eventText.gameObject.SetActive(true);
+            UpdateBaitUI(playerController.baitCount);        
+        }
+        else
+        {
+            // Optionally, call another event or do nothing
+            TriggerEvent(); // Try triggering another event if conditions aren't met
+        }
+    }
+
+    private void HideEventText()
+    {
+        eventText.gameObject.SetActive(false);
+    }
+
+    //-------------------------UPDATE UI-----------------------------------------
     public void UpdateDeckUI()
     {
         for (int i = 0; i < decks.Count; i++)
@@ -228,9 +289,9 @@ public class GameManager : MonoBehaviour
         return 0; // Default cost
     }
 
-//------------------------END AND RESET-------------------
+    //------------------------END AND RESET-------------------
 
-///TO hide hand, just hode all 3 decks
+    ///TO hide hand, just hode all 3 decks
     public void EndTurn()
     {
         if(cardCounter >= 5)
@@ -255,7 +316,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-//RESET NEVER CALLED-- Make sure to check this in Prod 4
+    //RESET NEVER CALLED-- Make sure to check this in Prod 4
     public void ResetGame()
     {
         foreach (var deck in decks)
