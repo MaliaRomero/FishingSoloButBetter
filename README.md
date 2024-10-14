@@ -7,7 +7,7 @@ Added Features:
 
 -Optional skip discard button
 
-- 3 random event examples
+-3 random event examples
 
 -Hand limit reached win condition screen
 
