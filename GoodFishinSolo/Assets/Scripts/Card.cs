@@ -24,7 +24,6 @@ public class Card : MonoBehaviour
     }
     private void OnMouseDown()
     {
-
         // Check if the card has not been played yet
         if ((!hasBeenPlayed) && gm.skipDiscardButton.activeSelf)
         {   
